@@ -30,6 +30,11 @@ public class ChangesCore {
      * Add change to change list
      */
     public void addChange(Change change) {
+        for(Change item : changes) {
+            if (item.changeOrder() == change.changeOrder()) {
+                throw new ChangeAddException("Change with order " + change.changeOrder() + " already exists");
+            }
+        }
         changes.add(change);
     }
 
