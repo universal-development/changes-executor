@@ -146,4 +146,21 @@ public class ChangesCoreTest {
         }
     }
 
+    @Test(expected = ChangeAddException.class)
+    public void testErrorOnAddingChangesWithSameOrder() {
+        changesCore.addChange(new AbstractChange(666, "Step 1") {
+            @Override
+            public void execute(ChangeContext changeContext) {
+
+            }
+        });
+
+        changesCore.addChange(new AbstractChange(666, "Step 2") {
+            @Override
+            public void execute(ChangeContext changeContext) {
+
+            }
+        });
+    }
+
 }
