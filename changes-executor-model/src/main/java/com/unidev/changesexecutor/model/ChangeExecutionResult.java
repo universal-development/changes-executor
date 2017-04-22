@@ -7,16 +7,29 @@ public class ChangeExecutionResult {
 
     public enum Result {SUCCESS, ERROR}
 
-    private long changeId;
+    private Change change;
     private Result result;
     private String message;
 
-    public long getChangeId() {
-        return changeId;
+    public ChangeExecutionResult() {
     }
 
-    public void setChangeId(long changeId) {
-        this.changeId = changeId;
+    public ChangeExecutionResult(Change change, Result result, String message) {
+        this.change = change;
+        this.result = result;
+        this.message = message;
+    }
+
+    public boolean isSuccess() {
+        return result == Result.SUCCESS;
+    }
+
+    public Change getChange() {
+        return change;
+    }
+
+    public void setChange(Change change) {
+        this.change = change;
     }
 
     public Result getResult() {
@@ -36,27 +49,9 @@ public class ChangeExecutionResult {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ChangeExecutionResult that = (ChangeExecutionResult) o;
-
-        if (changeId != that.changeId) return false;
-        return result == that.result;
-    }
-
-    @Override
-    public int hashCode() {
-        int result1 = (int) (changeId ^ (changeId >>> 32));
-        result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
-        return result1;
-    }
-
-    @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("ChangeExecutionResult{");
-        sb.append("changeId=").append(changeId);
+        sb.append("change=").append(change);
         sb.append(", result=").append(result);
         sb.append(", message='").append(message).append('\'');
         sb.append('}');
