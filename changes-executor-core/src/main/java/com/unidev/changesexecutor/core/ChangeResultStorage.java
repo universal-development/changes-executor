@@ -11,6 +11,8 @@ public interface ChangeResultStorage {
 
     Collection<ChangeExecutionResult> listResults();
 
+    boolean existChangeResult(String changeName);
+
     ChangeExecutionResult fetchResult(String changeName);
 
     ChangeExecutionResult persistResult(ChangeExecutionResult changeExecutionResult);

@@ -47,8 +47,11 @@ public class ChangesCore {
      */
     public void executeChanges(ChangeContext changeContext) {
         for(Change change : changes) {
-            if (changeResultStorage.fetchResult(change.changeName()).isSuccess()) {
-                continue;
+
+            if (changeResultStorage.existChangeResult(change.changeName())) {
+                if (changeResultStorage.fetchResult(change.changeName()).isSuccess()) {
+                    continue;
+                }
             }
             try {
                 change.execute(changeContext);
