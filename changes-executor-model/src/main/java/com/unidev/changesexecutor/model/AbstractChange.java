@@ -23,6 +23,14 @@ public abstract class AbstractChange implements Change {
         return changeName;
     }
 
+    public long getChangeOrder() {
+        return changeOrder;
+    }
+
+    public String getChangeName() {
+        return changeName;
+    }
+
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("AbstractChange{");
