@@ -2,6 +2,7 @@ package com.unidev.changesexecutor.core;
 
 import com.unidev.changesexecutor.model.Change;
 import com.unidev.changesexecutor.model.ChangeContext;
+import com.unidev.changesexecutor.model.ChangeExecutionResult;
 
 import java.util.*;
 
@@ -17,9 +18,13 @@ public class ChangesCore {
         }
     };
 
-
     private Set<Change> changes = new TreeSet<>(CHANGE_COMPARATOR);
 
+    private ChangeResultStorage changeResultStorage;
+
+    public ChangesCore(ChangeResultStorage changeResultStorage) {
+        this.changeResultStorage = changeResultStorage;
+    }
 
     /**
      * Add change to change list
@@ -42,7 +47,21 @@ public class ChangesCore {
      */
     public void executeChanges(ChangeContext changeContext) {
         for(Change change : changes) {
-            change.execute(changeContext);
+            if (changeResultStorage.fetchResult(change.changeName()).isSuccess()) {
+                continue;
+            }
+            try {
+                change.execute(changeContext);
+                ChangeExecutionResult changeExecutionResult = new ChangeExecutionResult(change,
+                        ChangeExecutionResult.Result.SUCCESS,  "Success");
+                changeResultStorage.persistResult(changeExecutionResult);
+            }catch (Exception e) {
+                ChangeExecutionResult changeExecutionResult = new ChangeExecutionResult(change,
+                        ChangeExecutionResult.Result.ERROR,
+                        e.getMessage());
+                changeResultStorage.persistResult(changeExecutionResult);
+                throw new ChangeExecutionException(e);
+            }
         }
     }
 
