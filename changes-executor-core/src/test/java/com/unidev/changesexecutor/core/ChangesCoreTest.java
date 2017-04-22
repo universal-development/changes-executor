@@ -7,8 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class ChangesCoreTest {
 
@@ -46,6 +50,8 @@ public class ChangesCoreTest {
     @Test
     public void testSequenceExecution() {
 
+        final Map<String, Date> executions = new HashMap<>();
+
         changesCore.addChange(new Change() {
             @Override
             public long changeOrder() {
@@ -60,6 +66,12 @@ public class ChangesCoreTest {
             @Override
             public void execute(ChangeContext changeContext) {
                 System.out.println(changeName());
+                executions.put(changeName(), new Date());
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -77,12 +89,23 @@ public class ChangesCoreTest {
             @Override
             public void execute(ChangeContext changeContext) {
                 System.out.println(changeName());
+                executions.put(changeName(), new Date());
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         ChangeContext changeContext = new ChangeContext();
 
         changesCore.executeChanges(changeContext);
+
+        Date change1 = executions.get("change1");
+        Date change2 = executions.get("change2");
+
+        assertThat( change2.compareTo(change1), is(1) );
 
     }
 
