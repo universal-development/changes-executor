@@ -3,18 +3,18 @@ package com.unidev.changesexecutor.model;
 /**
  * Result of change execution
  */
-public class ChangeExecutionResult<T extends ChangeExecutionResult.Result> {
+public class ChangeExecutionResult<T extends Change> {
 
     public enum Result {SUCCESS, ERROR}
 
-    private Change change;
-    private T result;
+    private T change;
+    private Result result;
     private String message;
 
     public ChangeExecutionResult() {
     }
 
-    public ChangeExecutionResult(Change change, T result, String message) {
+    public ChangeExecutionResult(T change, Result result, String message) {
         this.change = change;
         this.result = result;
         this.message = message;
@@ -24,19 +24,19 @@ public class ChangeExecutionResult<T extends ChangeExecutionResult.Result> {
         return result == Result.SUCCESS;
     }
 
-    public Change getChange() {
+    public T getChange() {
         return change;
     }
 
-    public void setChange(Change change) {
+    public void setChange(T change) {
         this.change = change;
     }
 
-    public T getResult() {
+    public Result getResult() {
         return result;
     }
 
-    public void setResult(T result) {
+    public void setResult(Result result) {
         this.result = result;
     }
 
